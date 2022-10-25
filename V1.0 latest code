@@ -1,0 +1,120 @@
+#include <LiquidCrystal_I2C.h>
+
+#include <FastLED_NeoPixel.h>
+
+//    jack daniels reads 501
+//    jack daniels reads 8% empty 369
+//    jack daniels reads 8%340-350 8% burbon
+//    idle = 80-90
+//    idle 140
+//    300 8% burbon
+//  85 locky
+//  79 ayla
+//  130 2 drinks hungry :)
+//  180
+//  175
+//  150
+// 230 woodstock 5%
+# define Senor A0
+# define ledred 6
+# define ledblue 7
+# define ledpwr 9
+# define led2 10
+# define led3 11
+# define led4 12
+# define ledmax 13
+#define DATA_PIN A2
+#define NUM_LEDS 2
+Adafruit_NeoPixel strip(NUM_LEDS, DATA_PIN, NEO_GRB);
+LiquidCrystal_I2C lcd(0x26, 16, 2);
+unsigned long previousMillis;
+const long interval = 50;
+float value;
+int a;
+void setup() {
+  lcd.init();
+  lcd.backlight();
+  strip.begin();  // initialize strip (required!)
+  strip.setBrightness(255);
+  Serial.begin(9600);
+}
+
+void loop() {
+  int currentMillis = millis();
+  int value = analogRead(A0);
+  int sensorValue = analogRead(A1);
+  value = analogRead(A0);
+  Serial.println(value);
+  float voltage = sensorValue * (5.0 / 1023.0);
+  Serial.println(voltage);
+  delay(10);
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  lcd.print("DrunkScale = " );
+  lcd.print(value);
+  lcd.setCursor(0, 1);
+  lcd.print("voltage = ");
+  lcd.print(voltage);
+  lcd.print("v");
+  delay(100);
+
+  if (value > 135) {
+    for (int a = 0; a < 2; a++) {
+      strip.setPixelColor(a, strip.Color(255, 255, 255));                 // set STRIP to white
+      strip.show();
+    }
+  }
+  if (value > 150) {
+    for (int a = 0; a < 2; a++) {
+      strip.setPixelColor(a, strip.Color(0, 255, 0));                 // set STRIP to green
+      strip.show();
+      lcd.clear();
+      lcd.setCursor(0, 1);
+      lcd.print("PARTY GUY");
+      lcd.setCursor(0, 0);
+      lcd.print("DrunkScale = " );
+      lcd.print(value);
+      delay(100);
+    }
+  }
+  if (value > 200) {
+    for (int a = 0; a < 2; a++) {
+      strip.setPixelColor(a, strip.Color(0, 0, 255));                 // set STRIP to blue
+      strip.show();
+      lcd.clear();
+      lcd.setCursor(0, 1);
+      lcd.print("BET UR A CUNT");
+      lcd.setCursor(0, 0);
+      lcd.print("DrunkScale = " );
+      lcd.print(value);
+      delay(100);
+    }
+  }
+  if (value > 250) {
+    for (int a = 0; a < 2; a++) {
+      strip.setPixelColor(a, strip.Color(255, 0, 255));                 // set STRIP to white
+      strip.show();
+      lcd.clear();
+      lcd.setCursor(0, 1);
+      lcd.print("UR FUCKED");
+      lcd.setCursor(0, 0);
+      lcd.print("DrunkScale = " );
+      lcd.print(value);
+      delay(100);
+    }
+  }
+  if (value > 300) {
+    for (int a = 0; a < 2; a++) {
+      strip.setPixelColor(a, strip.Color(255, 0, 0));                 // set STRIP to red
+      strip.show();
+      lcd.clear();
+      lcd.setCursor(0, 1);
+      lcd.print("BED TIME WANKER");
+      lcd.setCursor(0, 0);
+      lcd.print("DrunkScale = " );
+      lcd.print(value);
+      delay(100);
+    }
+  }
+  delay(10);
+}
